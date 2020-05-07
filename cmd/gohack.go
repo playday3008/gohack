@@ -1,13 +1,15 @@
-package config
+package main
 
 import (
 	"fmt"
+	"github.com/jamesmoriarty/gohack"
+	log "github.com/sirupsen/logrus"
+	"os"
 )
 
-var (
-	Version string
-	Date    string
-	Banner  = `
+func PrintBanner() {
+	fmt.Printf(
+		`
     ___       ___       ___       ___       ___       ___   
    /\  \     /\  \     /\__\     /\  \     /\  \     /\__\  
   /::\  \   /::\  \   /:/__/_   /::\  \   /::\  \   /:/ _/_ 
@@ -17,11 +19,20 @@ var (
    \/__/     \/__/     \/__/     \/__/     \/__/     \|__| 
  
 version: %s-%s
-`
-)
 
-func PrintBanner() {
-	fmt.Printf(Banner, Version, Date)
+`, gohack.Version, gohack.Date)
+}
 
-	fmt.Println()
+func main() {
+	PrintBanner()
+
+	client, err := gohack.Instrument()
+
+	if err != nil {
+		log.Fatal(err)
+
+		os.Exit(1)
+	}
+
+	gohack.Execute(client)
 }

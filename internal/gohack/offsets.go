@@ -1,34 +1,31 @@
-package config
+package gohack
 
 import (
 	"errors"
-	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"net/http"
 )
 
 const (
-	url = "https://raw.githubusercontent.com/frk1/hazedumper/master/csgo.yaml"
+	OffsetsURL = "https://raw.githubusercontent.com/frk1/hazedumper/master/csgo.yaml"
 )
 
 type Offsets struct {
 	Timestamp  string `yaml:"timestamp"`
 	Signatures struct {
-		OffsetLocalPlayer uintptr `yaml:"dwLocalPlayer"`
-		OffsetForceJump   uintptr `yaml:"dwForceJump"`
+		OffsetdwLocalPlayer uintptr `yaml:"dwLocalPlayer"`
+		OffsetdwForceJump uintptr `yaml:"dwForceJump"`
 	} `yaml:"signatures"`
 	Netvars struct {
-		OffsetLocalPlayerFlags uintptr `yaml:"m_fFlags"`
+		Offsetm_fFlags uintptr `yaml:"m_fFlags"`
 	} `yaml:"netvars"`
 }
 
 func GetOffsets() (*Offsets, error) {
-	log.WithFields(log.Fields{"url": url}).Info("GetOffsets")
-
 	var offsets Offsets
 
-	resp, err := http.Get(url)
+	resp, err := http.Get(OffsetsURL)
 
 	if err != nil {
 		return nil, errors.New("Failed making offsets request")
